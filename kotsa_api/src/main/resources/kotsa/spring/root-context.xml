@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:repository="http://www.springframework.org/schema/data/repository"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.6.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+<!--     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/props/*.xml</value>
+            </list>
+        </property>
+    </bean> -->
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/props/db_properties.xml</value>
+            </list>
+        </property>
+    </bean>
+	
+	<context:property-placeholder location="classpath:/kotsa/props/*.properties"/>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:/kotsa/messages/messages" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="cacheSeconds" value="60" />
+	</bean>
+	
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource" />
+    </bean>
+    
+    <util:properties id="common" location="classpath:/kotsa/props/common.properties"></util:properties>
+    
+	<!-- PathMatcher implementation for Ant-style path patterns -->
+	<bean id="antPathMatcher" class="org.springframework.util.AntPathMatcher" />
+	
+	<!-- RestTemplate Timeout Factory -->
+	<bean id="restTemplateTimeoutFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		<property name="connectTimeout" value="3000" />
+		<property name="readTimeout" value="3000" />
+	</bean> 
+	
+	<!-- RestTemplate -->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="restTemplateTimeoutFactory" />
+	</bean>
+	
+	<context:component-scan base-package="ideabeans.kotsa.api">
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController" />
+	</context:component-scan>
+	
+	<import resource="classpath:/kotsa/spring/datasource-context.xml" />
+	<import resource="classpath:/kotsa/spring/transaction-context.xml" />
+</beans>

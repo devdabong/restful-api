@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.database.driver}"/>
+        <property name="url" value="${jdbc.database.url}"/>
+        <property name="username" value="${jdbc.database.username}"/>
+        <property name="password" value="${jdbc.database.password}"/>
+        <property name="initialSize" value="${jdbc.database.initial.size}"/>
+		<property name="minIdle" value="${jdbc.database.min.idle}"/>
+		<property name="maxIdle" value="${jdbc.database.max.idle}"/>
+		<property name="maxTotal" value="${jdbc.database.max.active}"/>
+		<property name="maxWaitMillis" value="${jdbc.database.max.wait}"/>
+		<property name="poolPreparedStatements" value="${jdbc.database.pool.prepared.statements}"/>
+		<property name="defaultAutoCommit" value="${jdbc.database.default.auto.commit}"/>
+		<property name="validationQuery" value="${jdbc.database.validation.query}" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:/mybatis-config-base.xml" />
+        <property name="mapperLocations" value="classpath:/kotsa/db/mysql/*Mapper.xml" /> 
+		    <!-- <property name="dataSource" ref="dataSource"/>
+		    <property name="configLocation" value="classpath:mybatis-config-base.xml" />
+		    <property name="mapperLocations">
+	            <list>
+	                <value>classpath*:**/kotsa/db/mysql/*Mapper.xml</value>
+	            </list>
+	        </property> -->
+		</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="serviceMapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="ideabeans.kotsa.api.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+    
+    <!-- <context:property-placeholder location="classpath:/kotsa/props/*.properties"/> -->
+</beans>

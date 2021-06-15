@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<properties>
+		<!-- <property name="logdir">/home/parksw/sejong/wideshot/IDB/dberrors/api</property>
+        <property name="db1name">db1error</property>
+        <property name="db2name">db2error</property>
+        <property name="filenamepattern">${logdir}/${db1name}_%d{yyyyMMdd}.log</property>
+        <property name="filepattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</property> -->
+        
+        <!-- <property name="dailylogdir">/home/parksw/sejong/wideshot/IDB/dailylogs/api</property>
+        <property name="dailylogfilename">api-daily</property>
+        <property name="dailylogfilenamepattern">${dailylogdir}/${dailylogfilename}_%d{yyyyMMdd}.log</property>
+        <property name="dailylogfilepattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</property> -->
+        
+        <property name="consolepattern">[%d{yyyy-MM-dd HH:mm:ss}] %-5p: %c - %m%n</property>
+    </properties>
+        
+	<Appenders>
+		<!-- <RollingFile name="DB1_LOG_FILE" fileName="${logdir}/${db1name}.log" 
+					filePattern="${filenamepattern}"
+					immediateFlush="true">
+        	<PatternLayout pattern="${filepattern}"/>
+        	<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+    	</RollingFile>
+    	<RollingFile name="DB2_LOG_FILE" fileName="${logdir}/${db2name}.log" 
+					filePattern="${filenamepattern}"
+					immediateFlush="true">
+        	<PatternLayout pattern="${filepattern}"/>
+        	<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+    	</RollingFile>
+    	<RollingFile name="DAILY_LOG_FILE" fileName="${dailylogdir}/${dailylogfilename}.log" 
+					filePattern="${dailylogfilenamepattern}"
+					immediateFlush="true">
+        	<PatternLayout pattern="${dailylogfilepattern}"/>
+        	<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+    	</RollingFile> -->
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="${consolepattern}" />
+		</Console>
+	</Appenders>
+  
+	<Loggers>
+		<Logger name="org.springframework" level="DEBUG" />
+		<!-- <Logger name="com.wideshot.api.common.service.user.dblogger.firstdb" level="ERROR" additivity="false">
+			<AppenderRef ref="DB1_LOG_FILE"/>
+		</Logger>
+		<Logger name="com.wideshot.api.common.service.user.dblogger.seconddb" level="ERROR" additivity="false">
+			<AppenderRef ref="DB2_LOG_FILE"/>
+		</Logger>
+		<Logger name="com.wideshot.api" level="INFO" additivity="false">
+			<AppenderRef ref="DAILY_LOG_FILE" />
+		</Logger> -->
+		<Logger name="ideabeans.kotsa" level="INFO">
+			<AppenderRef ref="CONSOLE"/>
+		</Logger>
+		<Logger name="org.apache" level="ERROR"/>
+		<Logger name="org.mybatis.spring" level="ERROR"/>
+		<!-- <Logger name="org.jasypt.spring31" level="ERROR"/>
+		<Logger name="egovframework.rte" level="ERROR"/> -->
+		  
+		<Root level="DEBUG" additivity="false">
+			<!-- <AppenderRef ref="DB1_LOG_FILE"/>
+			<AppenderRef ref="DB2_LOG_FILE"/>
+			<AppenderRef ref="DAILY_LOG_FILE" /> -->
+			<AppenderRef ref="CONSOLE" />
+		</Root>
+	</Loggers>
+</Configuration>

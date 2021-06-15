@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ideabeans.kotsa.api.dao.SendDAO">
+	<insert id="insertSendMsg" parameterType="map">
+		
+		INSERT INTO em_tran 
+		(
+			TRAN_PHONE,
+			TRAN_CALLBACK,
+			TRAN_TYPE,
+			TRAN_DATE,
+			TRAN_MSG,
+			MSG_GRP_ID
+		)
+		VALUES
+		<foreach collection="list" item="tran" separator=" , ">
+		(
+			
+			  #{tran.tranPhone}	
+			, #{tran.tranCallback}
+			, #{tran.tranType}
+			<choose>
+				<when test='tran.tranDate == null'>
+				, NOW() 
+				</when>
+				<otherwise>
+				, #{tran.tranDate}
+				</otherwise>
+			</choose>
+			, #{tran.tranMsg} 	
+			, #{tran.msgGrpId} 
+			 
+		)
+		</foreach>
+	</insert>
+</mapper>
